@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Campus Créneaux · Planning des salles</title>
+  <link rel="icon" href="favicon.svg">
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="top">
+    <div class="shell top-inner">
+      <a class="brand" href="./"><span class="mark" aria-hidden="true">▦</span> Campus <strong>Créneaux</strong></a>
+      <button class="primary" id="new-booking" disabled><span aria-hidden="true">＋</span> Réserver un créneau</button>
+    </div>
+  </header>
+  <main class="shell">
+    <section class="intro">
+      <p class="eyebrow">ESPACES DU CAMPUS</p>
+      <h1>Planning des salles</h1>
+      <p>Consultez les disponibilités et réservez une salle ou un laboratoire.</p>
+    </section>
+    <p id="notification" class="notification" role="status" hidden></p>
+    <section class="calendar" aria-labelledby="date-label">
+      <div class="calendar-top">
+        <div>
+          <p class="eyebrow">JOURNÉE SÉLECTIONNÉE</p>
+          <h2 id="date-label">Chargement du planning…</h2>
+        </div>
+        <div class="date-controls">
+          <button id="today" disabled>Aujourd’hui</button>
+          <button id="previous" class="square" aria-label="Jour précédent" disabled>‹</button>
+          <button id="next" class="square" aria-label="Jour suivant" disabled>›</button>
+          <input id="date-picker" type="date" aria-label="Choisir une date" disabled>
+        </div>
+      </div>
+      <div class="week" id="week" aria-label="Jours de la semaine"></div>
+    </section>
+    <div class="workspace">
+      <section class="panel inventory" aria-labelledby="rooms-title">
+        <div class="panel-header">
+          <h2 id="rooms-title">Espaces</h2><span class="muted" id="room-count"></span>
+        </div>
+        <div class="filters" id="filters" aria-label="Filtrer les espaces">
+          <button data-type="" aria-pressed="true">Tous</button>
+          <button data-type="Salle" aria-pressed="false">Salles</button>
+          <button data-type="Laboratoire" aria-pressed="false">Labos</button>
+        </div>
+        <div class="rooms" id="rooms"></div>
+      </section>
+      <section class="panel agenda" aria-labelledby="agenda-title">
+        <div class="panel-header">
+          <div><p class="eyebrow">AGENDA</p><h2 id="agenda-title">Créneaux du jour</h2></div>
+          <span class="agenda-count" id="booking-count"></span>
+        </div>
+        <div class="agenda-body" id="agenda"></div>
+      </section>
+    </div>
+  </main>
+  <dialog id="booking-dialog" aria-labelledby="booking-title">
+    <form id="booking-form">
+      <div class="dialog-header"><h2 id="booking-title">Réserver un créneau</h2><button type="button" class="square" data-close="booking-dialog" aria-label="Fermer">×</button></div>
+      <label>Espace<select name="roomId" required></select></label>
+      <div class="form-row">
+        <label>Date<input name="date" type="date" required></label>
+        <label>Répétition<select name="weeks" id="weeks"></select></label>
+      </div>
+      <div class="form-row">
+        <label>Début<select name="start" required></select></label>
+        <label>Fin<select name="end" required></select></label>
+      </div>
+      <label>Activité<input name="title" maxlength="80" placeholder="Ex. TP de physique" required></label>
+      <label>Responsable<input name="organizer" maxlength="60" placeholder="Ex. Équipe de sciences" required></label>
+      <p class="error" id="booking-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button type="button" data-close="booking-dialog">Fermer</button><button class="primary" type="submit">Confirmer la réservation</button></div>
+    </form>
+  </dialog>
+  <dialog id="cancel-dialog" aria-labelledby="cancel-title">
+    <form id="cancel-form">
+      <div class="dialog-header"><h2 id="cancel-title">Annuler la réservation</h2><button type="button" class="square" data-close="cancel-dialog" aria-label="Fermer">×</button></div>
+      <p id="cancel-description"></p>
+      <label id="series-option" class="checkbox" hidden><input type="checkbox" name="series"> Annuler toutes les occurrences de la série</label>
+      <p class="error" id="cancel-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button type="button" data-close="cancel-dialog">Retour</button><button class="danger" type="submit">Confirmer l’annulation</button></div>
+    </form>
+  </dialog>
+  <template id="room-template">
+    <button class="room" type="button">
+      <span class="space-icon" aria-hidden="true"></span>
+      <span class="room-info"><strong></strong><span class="location"></span><span class="equipment"></span></span>
+      <span class="capacity"></span>
+    </button>
+  </template>
+  <template id="booking-template">
+    <article class="booking">
+      <div class="time"><strong></strong><span></span></div>
+      <div class="booking-info"><h3></h3><p></p><span class="series" hidden>Chaque semaine</span></div>
+      <button type="button" class="cancel-button">Annuler</button>
+    </article>
+  </template>
+</body>
+</html>
